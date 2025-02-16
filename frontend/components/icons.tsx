@@ -65,6 +65,111 @@ export const LoginIcon: React.FC<IconSvgProps> = ({
     );
 };
 
+export const PopularIcon: React.FC<IconSvgProps> = ({
+    size = 24,
+    width,
+    height,
+    ...props
+}) => {
+    return (
+        <svg
+            xmlns='http://www.w3.org/2000/svg'
+            height={size || height}
+            viewBox='0 0 24 24'
+            width={size || width}
+            {...props}
+        >
+            <path
+                fill='none'
+                stroke='currentColor'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth='2'
+                d='M3 13a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zm6-4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm6-4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 20h14'
+            ></path>
+        </svg>
+    );
+};
+
+export const NewIcon: React.FC<IconSvgProps> = ({
+    size = 24,
+    width,
+    height,
+    ...props
+}) => {
+    return (
+        <svg
+            xmlns='http://www.w3.org/2000/svg'
+            height={size || height}
+            viewBox='0 0 16 16'
+            width={size || width}
+            {...props}
+        >
+            <path
+                fill='currentColor'
+                d='M14 4V2H0v11a1 1 0 0 0 1 1h13.5a1.5 1.5 0 0 0 1.5-1.5V4zm-1 9H1V3h12zM2 5h10v1H2zm6 2h4v1H8zm0 2h4v1H8zm0 2h3v1H8zM2 7h5v5H2z'
+            ></path>
+        </svg>
+    );
+};
+
+export const HeartIcon: React.FC<IconSvgProps> = ({
+    size = 24,
+    width,
+    height,
+    strokeWidth = 1.5,
+    fill = 'none',
+    ...props
+}) => {
+    return (
+        <svg
+            aria-hidden='true'
+            fill={fill}
+            focusable='false'
+            height={size || height}
+            role='presentation'
+            viewBox='0 0 24 24'
+            width={size || width}
+            {...props}
+        >
+            <path
+                d='M12.62 20.81C12.28 20.93 11.72 20.93 11.38 20.81C8.48 19.82 2 15.69 2 8.68998C2 5.59998 4.49 3.09998 7.56 3.09998C9.38 3.09998 10.99 3.97998 12 5.33998C13.01 3.97998 14.63 3.09998 16.44 3.09998C19.51 3.09998 22 5.59998 22 8.68998C22 15.69 15.52 19.82 12.62 20.81Z'
+                stroke='currentColor'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={strokeWidth}
+            />
+        </svg>
+    );
+};
+
+export const PlayerIcon: React.FC<IconSvgProps> = ({
+    size = 24,
+    width,
+    height,
+    strokeWidth = 1.5,
+    fill = 'none',
+    ...props
+}) => {
+    return (
+        <svg
+            aria-hidden='true'
+            fill={fill}
+            focusable='false'
+            height={size || height}
+            role='presentation'
+            viewBox='0 0 24 24'
+            width={size || width}
+            {...props}
+        >
+            <path
+                fill='currentColor'
+                d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4s-4 1.79-4 4s1.79 4 4 4m0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4'
+            ></path>
+        </svg>
+    );
+};
+
 export const GithubIcon: React.FC<IconSvgProps> = ({
     size = 24,
     width,
