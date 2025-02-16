@@ -3,7 +3,29 @@
 @tailwind utilities;
 
 body {
-    @apply bg-contain bg-center;
+    @apply bg-contain bg-center dark:bg-gray-800 dark:bg-blend-multiply;
     background-image: url('/bg.jpg');
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    transform-style: preserve-3d;
+    transform-origin: left center;
+    width: 90px;
+    height: 128px;
+    position: absolute;
+}
+
+.card-name {
+    position: absolute;
+    bottom: 6px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    font-style: italic;
+    line-height: 100%;
 }
 
