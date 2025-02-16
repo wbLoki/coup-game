@@ -29,3 +29,19 @@ body {
     line-height: 100%;
 }
 
+.action-button {
+    @apply shadow-lg hover:bg-foreground/15 hover:text-foreground/90 transition ease-in-out;
+    padding-inline: 0.25rem;
+    border-radius: 0.125rem;
+    transition-duration: 300ms;
+    background-color: hsl(var(--heroui-foreground) / 0.2);
+}
+
+.role-text {
+    color: #fff;
+    font-weight: 300;
+    text-transform: uppercase;
+    padding-inline: 0.25rem;
+    border-radius: 0.125rem;
+    font-size: 0.75rem;
+}
