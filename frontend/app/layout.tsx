@@ -46,7 +46,7 @@ export default function RootLayout({
                 >
                     <div className='relative flex flex-col min-h-screen'>
                         <Navbar />
-                        <main className='pt-16 px-4'>{children}</main>
+                        <main className='px-4'>{children}</main>
                         <footer className='w-full flex items-center justify-center py-3'>
                             <Link
                                 isExternal
