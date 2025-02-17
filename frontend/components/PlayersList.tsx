@@ -14,7 +14,7 @@ export default function PlayersList({ players }: { players: Player[] }) {
         <div className='flex flex-col w-60 gap-2'>
             {players.map(({ name, icon, premium }, index) => (
                 <Card key={index} className='bg-background justify-start'>
-                    <CardHeader className='flex gap-3 w-full'>
+                    <CardHeader className='flex w-full'>
                         <User
                             avatarProps={{
                                 src:

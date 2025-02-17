@@ -57,7 +57,7 @@ export default function RootLayout({
                                 <span className='text-default-600'>
                                     Powered by
                                 </span>
-                                <p className='text-primary'>HeroUI</p>
+                                <p className='text-primary'>Loki</p>
                             </Link>
                         </footer>
                     </div>

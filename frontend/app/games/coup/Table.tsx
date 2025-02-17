@@ -1,14 +1,12 @@
 import Card from './Card';
 
-const players = [
-    { id: 1, name: 'Alice', avatar: '/avatars/alice.png' },
-    { id: 2, name: 'Bob', avatar: '/avatars/bob.png' },
-    { id: 3, name: 'Charlie', avatar: '/avatars/charlie.png' },
-    { id: 4, name: 'Dave', avatar: '/avatars/dave.png' },
-    { id: 5, name: 'Eve', avatar: '/avatars/eve.png' },
-];
+type Player = {
+    name: string;
+    icon: string;
+    premium: boolean;
+};
 
-export default function Table() {
+export default function Table({ players }: { players: Player[] }) {
     return (
         <div className='relative w-96 h-96 rounded-full border-4 border-gray-300 bg-green-600 m-36'>
             {players.map((player, index) => {
@@ -18,7 +16,7 @@ export default function Table() {
 
                 return (
                     <div
-                        key={player.id}
+                        key={index}
                         className='absolute flex font-bold flex-col items-center justify-center'
                         style={{
                             top: `${y}%`,
@@ -34,6 +32,31 @@ export default function Table() {
                     </div>
                 );
             })}
+            <div
+                className='absolute flex font-bold flex-col items-center justify-center'
+                style={{
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                }}
+            >
+                <div className='flex h-32 relative justify-center'>
+                    <div
+                        className='card flex items-center justify-center'
+                        style={{
+                            backgroundPosition: '0% 0%',
+                            backgroundImage: 'url(/games/coup/cards.jpg)',
+                        }}
+                    >
+                        <span
+                            style={{ color: 'black' }}
+                            className='card-name font-normal -top-5 text-xs'
+                        >
+                            Deck (4)
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
