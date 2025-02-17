@@ -1,39 +1,39 @@
-import { title } from '@/components/primitives';
-import Table from './Table';
-import Actions from './Actions';
-import PlayersList from '@/components/PlayersList';
-import Reactions from './Reactions';
+'use client';
+import { Input } from '@heroui/input';
+import { Button } from '@heroui/button';
+import { connectWebSocket } from '@/lib/websocket';
+import { useState } from 'react';
 
-const players = [
-    { name: 'Alice', icon: '/avatars/alice.png', premium: false },
-    { name: 'Bob', icon: '/avatars/bob.png', premium: true },
-    { name: 'Charlie', icon: '/avatars/charlie.png', premium: false },
-    // { name: 'Dave', icon: '/avatars/dave.png', premium: false },
-    // { name: 'Eve', icon: '/avatars/eve.png', premium: true },
-    // { name: 'Kamal', icon: '/avatars/eve.png', premium: false },
-    // { name: 'Loki', icon: '/avatars/eve.png', premium: true },
-    // { name: 'Ayoub', icon: '/avatars/eve.png', premium: false },
-];
-
-export default async function GamePage({
-    params,
-}: {
-    params: Promise<{ game: string }>;
-}) {
-    const game = (await params).game;
+export default function GamePage() {
+    const [gameData, setGameData] = useState({ userId: '', gameId: '' });
+    const handleCreateGame = () => {
+        console.log('creating game...');
+        connectWebSocket(gameData);
+    };
     return (
-        <div className='flex '>
-            <div className='flex flex-col w-full'>
-                <Reactions reactions={[{ id: 1, title: 'test' }]} />
-                <div className='flex justify-evenly w-full'>
-                    <div className='p-4'>
-                        <Actions />
-                    </div>
-                    <Table players={players} />
-                </div>
-            </div>
-            <div className='max-h-96 overflow-auto min-w-fit'>
-                <PlayersList players={players} />
+        <div className='flex flex-col items-center'>
+            <div className='flex flex-col max-w-sm w-full gap-4'>
+                <Input
+                    label='Username'
+                    placeholder='Enter your username'
+                    type='text'
+                    variant='underlined'
+                    value={gameData.userId}
+                    onChange={(e) =>
+                        setGameData({ ...gameData, userId: e.target.value })
+                    }
+                />
+                <Input
+                    label='Game ID'
+                    placeholder='Enter game ID'
+                    type='text'
+                    variant='underlined'
+                    value={gameData.gameId}
+                    onChange={(e) =>
+                        setGameData({ ...gameData, gameId: e.target.value })
+                    }
+                />
+                <Button onPress={handleCreateGame}>Create Game</Button>
             </div>
         </div>
     );
