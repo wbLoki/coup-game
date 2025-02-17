@@ -12,9 +12,10 @@ app = FastAPI()
 manager = ConnectionManager()
 
 
-@app.websocket("/ws/{gameId}")
-async def websocket_endpoint(websocket: WebSocket, gameId: str):
-    await manager.connect(websocket, gameId)
+@app.websocket("/ws/{playerId}")
+async def websocket_endpoint(websocket: WebSocket, playerId: str):
+    gameId = "default"
+    await manager.connect(websocket, gameId, playerId)
 
     try:
         while True:
@@ -23,12 +24,12 @@ async def websocket_endpoint(websocket: WebSocket, gameId: str):
 
             if message_type == "action":
                 action = data.get("action", "Boom")
-                await manager.handle_action(gameId, data["player_id"], action)
+                await manager.handle_action(gameId, playerId, action)
             elif message_type == "reaction":
                 reaction = data.get("reaction", "Boom")
-                manager.handle_reaction(gameId, data["player_id"], reaction)
+                manager.handle_reaction(gameId, playerId, reaction)
             elif message_type == "command":
-                await manager.handle_command(gameId, data["player_id"])
+                await manager.handle_command(gameId, playerId)
             
 
     except WebSocketDisconnect:

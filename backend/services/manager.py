@@ -14,9 +14,9 @@ class ConnectionManager:
         )
         self.default_game = {"players": defaultdict()}
 
-    async def connect(self, websocket: WebSocket, gameId: str):
+    async def connect(self, websocket: WebSocket, gameId: str, player_id: str):
         await websocket.accept()
-        player_id = utils.generate_random_string(6)
+        
 
         if gameId not in self.games:
             self.games[gameId] = {
