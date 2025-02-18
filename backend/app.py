@@ -29,7 +29,8 @@ async def websocket_endpoint(websocket: WebSocket, playerId: str, gameId: str = 
                 reaction = data.get("reaction", "Boom")
                 manager.handle_reaction(gameId, playerId, reaction)
             elif message_type == "command":
-                await manager.handle_command(gameId, playerId)
+                command = data.get("command", "Boom")
+                await manager.handle_command(gameId, playerId, command)
             
 
     except WebSocketDisconnect:

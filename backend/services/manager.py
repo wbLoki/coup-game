@@ -50,11 +50,15 @@ class ConnectionManager:
         game_instance: CoupeGame = self.games[gameId]["game_instance"]
         game_instance.perform_reaction(player_id, reaction)
 
-    async def handle_command(self, gameId, player_id):
+    async def handle_command(self, gameId, player_id, command=None):
         game_instance: CoupeGame = self.games[gameId]["game_instance"]
-        game_player = game_instance.get_player(player_id)
         manager_player: Dict[str, WebSocket] = self.games[gameId]["players"][player_id]
-        await manager_player["websocket"].send_json(game_player)
+        if command == "me":
+            game_player = game_instance.get_player(player_id)
+            await manager_player["websocket"].send_json(game_player)
+            return
+        await game_instance.perform_command(command)
+        return 
 
     def disconnect(self, websocket: WebSocket, gameId):
         self.games[gameId].remove(websocket)

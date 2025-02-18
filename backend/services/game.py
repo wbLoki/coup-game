@@ -12,7 +12,7 @@ class CoupeGame:
         self.cards = self.ROLES
         self.turn = 0
         self.turns = {}
-        self.manager = None
+        self.manager: ConnectionManagerInterface | None = None
 
     @staticmethod
     def get_random_cards():
@@ -31,6 +31,28 @@ class CoupeGame:
                 "turn": self.turn,
             }
 
+    async def perform_command(self, command: str):
+        if command == "tabla":
+            all_players_with_no_cards = [
+                {
+                    "player_id": player,
+                    "credit": details["credit"],
+                    "turn": details["turn"],
+                }
+                for player, details in self.players.items()
+            ]
+
+            await self.manager.broadcast(
+                {
+                    "type": "command",
+                    "command": "tabla",
+                    "players": all_players_with_no_cards,
+                },
+                self.id,
+            )
+            return 
+        
+    
     def perform_reaction(self, player_id, reaction):
         if reaction == "allow":
             self.turns[self.turn]["reaction"]["allow"] = True
