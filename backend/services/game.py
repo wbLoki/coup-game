@@ -12,6 +12,7 @@ class CoupeGame:
         self.cards = self.ROLES
         self.turn = 0
         self.turns = {}
+        self.manager = None
 
     @staticmethod
     def get_random_cards():
@@ -50,6 +51,7 @@ class CoupeGame:
         if action == "tax":
             if "DU" in challenged_cards:
                 challengee_cards.pop()
+                self.players[challengee_player_id]["credit"] += 3
                 print(f"{challenged_player_id} won the challenge")
             else:
                 challenged_cards.pop()

@@ -26,6 +26,7 @@ class ConnectionManager:
 
         game_instance: CoupeGame = self.games[gameId]["game_instance"]
         game_instance.id = gameId
+        game_instance.manager = self
         game_instance.add_player(player_id)
 
         self.games[gameId]["players"][player_id] = {
