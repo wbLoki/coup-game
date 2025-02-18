@@ -16,7 +16,6 @@ class ConnectionManager:
 
     async def connect(self, websocket: WebSocket, gameId: str, player_id: str):
         await websocket.accept()
-        
 
         if gameId not in self.games:
             self.games[gameId] = {
@@ -33,7 +32,14 @@ class ConnectionManager:
             "websocket": websocket,
         }
 
-        await websocket.send_json(game_instance.players[player_id])
+        await websocket.send_json(
+            {
+                "type": "init",
+                "message": "new game",
+                "player": game_instance.players[player_id],
+                "gameId": gameId,
+            }
+        )
         # self.games[gameId].append(websocket)
 
     async def handle_action(self, gameId, player_id, action, target=None):

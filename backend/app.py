@@ -13,8 +13,8 @@ manager = ConnectionManager()
 
 
 @app.websocket("/ws/{playerId}")
-async def websocket_endpoint(websocket: WebSocket, playerId: str):
-    gameId = "default"
+async def websocket_endpoint(websocket: WebSocket, playerId: str, gameId: str = "default_game"):
+    
     await manager.connect(websocket, gameId, playerId)
 
     try:
