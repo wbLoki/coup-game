@@ -40,6 +40,8 @@ class ConnectionManager:
                 "gameId": gameId,
             }
         )
+
+        await game_instance.perform_command("tabla")
         # self.games[gameId].append(websocket)
 
     async def handle_action(self, gameId, player_id, action, target=None):
