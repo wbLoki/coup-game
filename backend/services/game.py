@@ -31,7 +31,7 @@ class CoupeGame:
                 "turn": self.turn,
             }
 
-    async def perform_command(self, command: str):
+    async def perform_command(self, command: str, **kwargs):
         if command == "tabla":
             all_players_with_no_cards = [
                 {
@@ -42,8 +42,6 @@ class CoupeGame:
                 for player, details in self.players.items()
             ]
 
-            print(self.players)
-            print(self.manager.games[self.id]["players"])
             for player, details in self.manager.games[self.id]["players"].items():
                 all_players_with_no_cards = [
                     {
@@ -64,19 +62,27 @@ class CoupeGame:
                         "players": all_players_with_no_cards,
                     }
                 )
-
+        elif command == "notfication":
+            await self.manager.broadcast(
+                {
+                    "type": "notification",
+                    "message": kwargs["message"],
+                },
+                self.id,
+            )
             return
 
-    def perform_reaction(self, player_id, reaction):
+    async def perform_reaction(self, player_id, reaction):
         if reaction == "allow":
             self.turns[self.turn]["reaction"]["allow"] = True
         elif reaction == "challenge":
             self.turns[self.turn]["reaction"]["challenge"] = True
             self.turns[self.turn]["reaction"]["player_id"] = player_id
-            self.handle_challenge()
+            await self.handle_challenge()
         self.turn = (self.turn + 1) % len(self.players)
+        await self.perform_command("tabla")
 
-    def handle_challenge(self):
+    async def handle_challenge(self):
         action = self.turns[self.turn]["action"]
         challengee_player_id = self.turns[self.turn]["reaction"]["player_id"]
         challenged_player_id = list(self.players.keys())[self.turn]
@@ -88,10 +94,10 @@ class CoupeGame:
             if "DU" in challenged_cards:
                 challengee_cards.pop()
                 self.players[challengee_player_id]["credit"] += 3
-                print(f"{challenged_player_id} won the challenge")
+                await self.perform_command("notfication", message="Tax challenge won")
             else:
                 challenged_cards.pop()
-                print(f"{challengee_player_id} won the challenge")
+                await self.perform_command("notfication", message="Tax challenge lost")
 
     async def perform_action(
         self, player_id, action, target=None, manager: ConnectionManagerInterface = None
