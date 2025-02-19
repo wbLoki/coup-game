@@ -32,17 +32,7 @@ class ConnectionManager:
             "websocket": websocket,
         }
 
-        await websocket.send_json(
-            {
-                "type": "init",
-                "message": "new game",
-                "player": game_instance.players[player_id],
-                "gameId": gameId,
-            }
-        )
-
         await game_instance.perform_command("tabla")
-        # self.games[gameId].append(websocket)
 
     async def handle_action(self, gameId, player_id, action, target=None):
         game_instance: CoupeGame = self.games[gameId]["game_instance"]

@@ -42,17 +42,31 @@ class CoupeGame:
                 for player, details in self.players.items()
             ]
 
-            await self.manager.broadcast(
-                {
-                    "type": "command",
-                    "command": "tabla",
-                    "players": all_players_with_no_cards,
-                },
-                self.id,
-            )
-            return 
-        
-    
+            print(self.players)
+            print(self.manager.games[self.id]["players"])
+            for player, details in self.manager.games[self.id]["players"].items():
+                all_players_with_no_cards = [
+                    {
+                        "player_id": _player,
+                        "credit": details["credit"],
+                        "turn": details["turn"],
+                        "cards": details["cards"]
+                        if _player == player
+                        else ["XX", "XX"],
+                    }
+                    for _player, details in self.players.items()
+                ]
+
+                await details["websocket"].send_json(
+                    {
+                        "type": "command",
+                        "command": "tabla",
+                        "players": all_players_with_no_cards,
+                    }
+                )
+
+            return
+
     def perform_reaction(self, player_id, reaction):
         if reaction == "allow":
             self.turns[self.turn]["reaction"]["allow"] = True
