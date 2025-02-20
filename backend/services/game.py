@@ -92,11 +92,11 @@ class CoupeGame:
 
         if action == "tax":
             if "DU" in challenged_cards:
-                challengee_cards.pop()
+                challengee_cards[0] = "XX"
                 self.players[challengee_player_id]["credit"] += 3
                 await self.perform_command("notfication", message="Tax challenge won")
             else:
-                challenged_cards.pop()
+                challenged_cards[0] = "XX"
                 await self.perform_command("notfication", message="Tax challenge lost")
 
     async def perform_action(
