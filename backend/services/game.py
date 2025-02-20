@@ -81,6 +81,8 @@ class CoupeGame:
     async def perform_reaction(self, player_id, reaction):
         if reaction == "allow":
             self.turns[self.turn]["reaction"]["allow"] = True
+            challenged_player_id = list(self.players.keys())[self.turn]
+            self.players[challenged_player_id]["credit"] += 3
         elif reaction == "challenge":
             self.turns[self.turn]["reaction"]["challenge"] = True
             self.turns[self.turn]["reaction"]["player_id"] = player_id
