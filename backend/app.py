@@ -1,5 +1,4 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-
 from db import config as _  # noqa: F401
 from db import client  # noqa: F401
 

@@ -3,7 +3,6 @@ from typing import Dict
 from collections import defaultdict
 
 
-import services.utils as utils
 from services.game import CoupeGame
 
 
