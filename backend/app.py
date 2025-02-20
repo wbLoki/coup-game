@@ -23,13 +23,13 @@ async def websocket_endpoint(websocket: WebSocket, playerId: str, gameId: str = 
             message_type = data.get("type", None)
 
             if message_type == "action":
-                action = data.get("action", "Boom")
+                action = data.get("subtype", "Boom")
                 await manager.handle_action(gameId, playerId, action)
             elif message_type == "reaction":
-                reaction = data.get("reaction", "Boom")
+                reaction = data.get("subtype", "Boom")
                 manager.handle_reaction(gameId, playerId, reaction)
             elif message_type == "command":
-                command = data.get("command", "Boom")
+                command = data.get("subtype", "Boom")
                 await manager.handle_command(gameId, playerId, command)
             
 

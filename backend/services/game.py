@@ -58,7 +58,7 @@ class CoupeGame:
                 await details["websocket"].send_json(
                     {
                         "type": "command",
-                        "command": "tabla",
+                        "subtype": "tabla",
                         "players": all_players_with_no_cards,
                     }
                 )
@@ -121,7 +121,7 @@ class CoupeGame:
             await manager.broadcast(
                 {
                     "type": "action",
-                    "action": "tax",
+                    "subtype": "tax",
                     "player_id": player_id,
                     "next": "reaction",
                     "turn": self.turn,
