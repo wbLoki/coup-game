@@ -1,6 +1,8 @@
 import random
+from typing import Dict
 
 from services.utils import ConnectionManagerInterface
+from services.types.game import Player
 
 
 class CoupeGame:
@@ -8,10 +10,11 @@ class CoupeGame:
 
     def __init__(self):
         self.id = None
-        self.players = {}
+        self.players: Dict[str, Player] = {}
         self.cards = self.ROLES
         self.turn = 0
         self.turns = {}
+        self.manager: ConnectionManagerInterface | None = None
 
     @staticmethod
     def get_random_cards():
@@ -30,16 +33,64 @@ class CoupeGame:
                 "turn": self.turn,
             }
 
-    def perform_reaction(self, player_id, reaction):
+    def remove_player(self, player_id):
+        self.players.pop(player_id)
+
+    async def perform_command(self, command: str, **kwargs):
+        if command == "tabla":
+            all_players_with_no_cards = [
+                {
+                    "player_id": player,
+                    "credit": details["credit"],
+                    "turn": details["turn"],
+                }
+                for player, details in self.players.items()
+            ]
+            for player, details in self.manager.games[self.id]["players"].items():
+                all_players_with_no_cards = [
+                    {
+                        "player_id": _player,
+                        "credit": details["credit"],
+                        "player_turn": list(self.players.keys()).index(_player),
+                        "cards": details["cards"]
+                        if _player == player
+                        else ["XX", "XX"],
+                    }
+                    for _player, details in self.players.items()
+                ]
+
+                await details["websocket"].send_json(
+                    {
+                        "type": "command",
+                        "subtype": "tabla",
+                        "turn": self.turn,
+                        "message": None,
+                        "players": all_players_with_no_cards,
+                    }
+                )
+        elif command == "notfication":
+            await self.manager.broadcast(
+                {
+                    "type": "notification",
+                    "message": kwargs["message"],
+                },
+                self.id,
+            )
+            return
+
+    async def perform_reaction(self, player_id, reaction):
         if reaction == "allow":
             self.turns[self.turn]["reaction"]["allow"] = True
+            challenged_player_id = list(self.players.keys())[self.turn]
+            self.players[challenged_player_id]["credit"] += 3
         elif reaction == "challenge":
             self.turns[self.turn]["reaction"]["challenge"] = True
             self.turns[self.turn]["reaction"]["player_id"] = player_id
-            self.handle_challenge()
+            await self.handle_challenge()
         self.turn = (self.turn + 1) % len(self.players)
+        await self.perform_command("tabla")
 
-    def handle_challenge(self):
+    async def handle_challenge(self):
         action = self.turns[self.turn]["action"]
         challengee_player_id = self.turns[self.turn]["reaction"]["player_id"]
         challenged_player_id = list(self.players.keys())[self.turn]
@@ -49,11 +100,12 @@ class CoupeGame:
 
         if action == "tax":
             if "DU" in challenged_cards:
-                challengee_cards.pop()
-                print(f"{challenged_player_id} won the challenge")
+                challengee_cards[0] = "XX"
+                self.players[challengee_player_id]["credit"] += 3
+                await self.perform_command("notfication", message="Tax challenge won")
             else:
-                challenged_cards.pop()
-                print(f"{challengee_player_id} won the challenge")
+                challenged_cards[0] = "XX"
+                await self.perform_command("notfication", message="Tax challenge lost")
 
     async def perform_action(
         self, player_id, action, target=None, manager: ConnectionManagerInterface = None
@@ -74,16 +126,18 @@ class CoupeGame:
         if action == "tax":
             self.turns[self.turn]["action"] = "tax"
             # send request to all players see who will [challenge, allow]
-            await manager.broadcast(
-                {
-                    "type": "action",
-                    "action": "tax",
-                    "player_id": player_id,
-                    "next": "reaction",
-                    "turn": self.turn,
-                },
-                self.id,
-            )
+            for player, details in self.manager.games[self.id]["players"].items():
+                if player == player_id:
+                    continue
+                await details["websocket"].send_json(
+                    {
+                        "type": "reaction",
+                        "subtype": "tax",
+                        "player_id": player_id,
+                        "next": "reaction",
+                        "turn": self.turn,
+                    }
+                )
             # self.turn = (self.turn + 1) % len(self.players)
 
         elif action == "challenge":
