@@ -1,15 +1,10 @@
 import Card from './Card';
-
-type Player = {
-    name: string;
-    icon: string;
-    premium: boolean;
-};
+import { Player } from '@/types/coup.types';
 
 export default function Table({ players }: { players: Player[] }) {
     return (
         <div className='relative w-96 h-96 rounded-full border-4 border-gray-300 bg-green-600 m-36'>
-            {players.map((player, index) => {
+            {players.map(({ player_id: name, cards }, index) => {
                 const angle = (index / players.length) * 2 * Math.PI;
                 const x = 50 + 70 * Math.cos(angle);
                 const y = 50 + 70 * Math.sin(angle);
@@ -24,10 +19,18 @@ export default function Table({ players }: { players: Player[] }) {
                             transform: 'translate(-50%, -50%)',
                         }}
                     >
-                        <span>{player.name}</span>
+                        <span>{name}</span>
                         <div className='h-32 relative w-40'>
-                            <Card position={0} card='duke' />
-                            <Card position={1} card='captain' />
+                            {cards.map((card, index) => {
+                                console.log('card: ', card);
+                                return (
+                                    <Card
+                                        key={index}
+                                        position={index}
+                                        card={card}
+                                    />
+                                );
+                            })}
                         </div>
                     </div>
                 );

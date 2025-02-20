@@ -2,38 +2,41 @@ import { Card, CardBody, CardHeader } from '@heroui/card';
 import { User } from '@heroui/user';
 import { PremiumIcon } from './icons';
 import { Divider } from '@heroui/divider';
+import { Player } from '@/types/coup.types';
 
-type Player = {
-    name: string;
-    icon: string;
-    premium: boolean;
-};
-
-export default function PlayersList({ players }: { players: Player[] }) {
+export default function PlayersList({
+    players,
+    turn,
+}: {
+    players: Player[];
+    turn: number;
+}) {
+    console.log('current turn: ', turn);
     return (
         <div className='flex flex-col w-60 gap-2'>
-            {players.map(({ name, icon, premium }, index) => (
+            {players.map(({ player_id: name, credit, player_turn }, index) => (
                 <Card key={index} className='bg-background justify-start'>
                     <CardHeader className='flex w-full'>
                         <User
                             avatarProps={{
                                 src:
-                                    icon ||
+                                    // icon ||
                                     'https://i.pravatar.cc/150?u=a04258114e29026702d',
                             }}
-                            description='$2'
+                            description={credit}
                             name={name || 'Jane Doe'}
                             className='flex-1 justify-start'
                         />
-                        <PremiumIcon
+                        {/* <PremiumIcon
                             // style={{ color: premium ? 'yellow' : '' }}
                             className={premium ? 'text-warning-400' : ''}
-                        />
+                        /> */}
                     </CardHeader>
                     <Divider />
                     <CardBody>
                         <span className='text-xs'>
-                            Player is waiting for his turn...
+                            {turn === player_turn &&
+                                `Waiting for ${name} to play`}
                         </span>
                     </CardBody>
                 </Card>

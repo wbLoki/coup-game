@@ -22,12 +22,14 @@ export default function Card({
         <div
             className='card'
             style={{
-                backgroundPosition: `0% ${cardValue}%`,
+                backgroundPosition: `0% ${cardValue.value}%`,
                 backgroundImage: 'url(/games/coup/cards.jpg)',
                 left: left,
             }}
         >
-            <span className='card-name font-normal'>{card}</span>
+            {card !== 'empty' && (
+                <span className='card-name font-normal'>{cardValue.name}</span>
+            )}
         </div>
     );
 }

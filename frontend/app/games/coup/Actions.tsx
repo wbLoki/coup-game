@@ -1,3 +1,4 @@
+import { sendAction } from '@/lib/websocket';
 import { Button } from '@heroui/button';
 
 const actions = [
@@ -11,18 +12,26 @@ const actions = [
 ];
 
 export default function Actions() {
+    const handleClick = (e: any) => {
+        console.log('clicked: ', e.target.name);
+        sendAction(e.target.name);
+    };
     return (
         <div className='lg:flex-col flex flex-initial flex-wrap text-center gap-2'>
             <div className='flex-1 uppercase'>
                 <span>Actions to take:</span>
             </div>
-            <Button className='action-button'>
+            <Button
+                onPress={handleClick}
+                name='income'
+                className='action-button'
+            >
                 <div className='flex flex-col flex-1 text-left self-start'>
                     <span className='capitalize font-bold text-sm'>income</span>
                     <span className='text-xs'>Take $1. Cannot block.</span>
                 </div>
             </Button>
-            <Button className='action-button'>
+            <Button onPress={handleClick} name='aid' className='action-button'>
                 <div className='flex flex-col flex-1 text-left self-start'>
                     <span className='capitalize font-bold text-sm'>
                         foreign aid
@@ -34,7 +43,7 @@ export default function Actions() {
                     </span>
                 </div>
             </Button>
-            <Button className='action-button'>
+            <Button onPress={handleClick} name='coup' className='action-button'>
                 <div className='flex flex-col flex-1 text-left self-start'>
                     <span className='capitalize font-bold text-sm'>coup</span>
                     <span className='text-xs'>
@@ -42,7 +51,7 @@ export default function Actions() {
                     </span>
                 </div>
             </Button>
-            <Button className='action-button'>
+            <Button onPress={handleClick} name='tax' className='action-button'>
                 <div className='flex flex-col flex-1 text-left self-start'>
                     <span className='capitalize font-bold text-sm'>
                         tax as{' '}

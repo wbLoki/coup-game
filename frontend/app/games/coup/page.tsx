@@ -2,13 +2,17 @@
 import { Input } from '@heroui/input';
 import { Button } from '@heroui/button';
 import { connectWebSocket } from '@/lib/websocket';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function GamePage() {
     const [gameData, setGameData] = useState({ userId: '', gameId: '' });
+    const [message, setMessage] = useState('');
+    useEffect(() => {
+        console.log('message: ', message);
+    }, [message]);
     const handleCreateGame = () => {
         console.log('creating game...');
-        connectWebSocket(gameData);
+        // connectWebSocket({ ...gameData, setMessage });
     };
     return (
         <div className='flex flex-col items-center'>
