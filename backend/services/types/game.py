@@ -28,3 +28,11 @@ class Player(BaseModel):
     credit: int
     turn: int
     cards: list[str]
+
+
+# self.games: Dict[str, Dict] = defaultdict(
+#             lambda: {"players": {}, "game_instance": self.create_game_instance()}
+#         )
+
+class ManagerPlayer(BaseModel):
+    ...

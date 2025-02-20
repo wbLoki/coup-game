@@ -46,13 +46,12 @@ class CoupeGame:
                 }
                 for player, details in self.players.items()
             ]
-
             for player, details in self.manager.games[self.id]["players"].items():
                 all_players_with_no_cards = [
                     {
                         "player_id": _player,
                         "credit": details["credit"],
-                        "turn": details["turn"],
+                        "player_turn": list(self.players.keys()).index(_player),
                         "cards": details["cards"]
                         if _player == player
                         else ["XX", "XX"],
@@ -64,6 +63,7 @@ class CoupeGame:
                     {
                         "type": "command",
                         "subtype": "tabla",
+                        "turn": self.turn,
                         "message": None,
                         "players": all_players_with_no_cards,
                     }
