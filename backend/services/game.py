@@ -124,16 +124,18 @@ class CoupeGame:
         if action == "tax":
             self.turns[self.turn]["action"] = "tax"
             # send request to all players see who will [challenge, allow]
-            await manager.broadcast(
-                {
-                    "type": "action",
-                    "subtype": "tax",
-                    "player_id": player_id,
-                    "next": "reaction",
-                    "turn": self.turn,
-                },
-                self.id,
-            )
+            for player, details in self.manager.games[self.id]["players"].items():
+                if player == player_id:
+                    continue
+                await details["websocket"].send_json(
+                    {
+                        "type": "action",
+                        "subtype": "tax",
+                        "player_id": player_id,
+                        "next": "challenge",
+                        "turn": self.turn,
+                    }
+                )
             # self.turn = (self.turn + 1) % len(self.players)
 
         elif action == "challenge":
