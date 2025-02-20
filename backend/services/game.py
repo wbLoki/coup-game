@@ -129,10 +129,10 @@ class CoupeGame:
                     continue
                 await details["websocket"].send_json(
                     {
-                        "type": "action",
+                        "type": "reaction",
                         "subtype": "tax",
                         "player_id": player_id,
-                        "next": "challenge",
+                        "next": "reaction",
                         "turn": self.turn,
                     }
                 )
