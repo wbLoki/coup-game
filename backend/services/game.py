@@ -1,6 +1,8 @@
 import random
+from typing import Dict
 
 from services.utils import ConnectionManagerInterface
+from services.types.game import Player
 
 
 class CoupeGame:
@@ -8,7 +10,7 @@ class CoupeGame:
 
     def __init__(self):
         self.id = None
-        self.players = {}
+        self.players: Dict[str, Player] = {}
         self.cards = self.ROLES
         self.turn = 0
         self.turns = {}
@@ -30,6 +32,9 @@ class CoupeGame:
                 "credit": 2,
                 "turn": self.turn,
             }
+
+    def remove_player(self, player_id):
+        self.players.pop(player_id)
 
     async def perform_command(self, command: str, **kwargs):
         if command == "tabla":
@@ -59,6 +64,7 @@ class CoupeGame:
                     {
                         "type": "command",
                         "subtype": "tabla",
+                        "message": None,
                         "players": all_players_with_no_cards,
                     }
                 )

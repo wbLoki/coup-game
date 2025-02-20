@@ -34,5 +34,4 @@ async def websocket_endpoint(websocket: WebSocket, playerId: str, gameId: str = 
             
 
     except WebSocketDisconnect:
-        manager.disconnect(websocket, gameId)
-        await manager.broadcast("Player Left", gameId)
+        await manager.disconnect(websocket, gameId, playerId)

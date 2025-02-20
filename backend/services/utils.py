@@ -9,6 +9,7 @@ def generate_random_string(length):
 
 
 class ConnectionManagerInterface(ABC):
+    
     @abstractmethod
     async def connect(self, websocket: WebSocket, gameId: str):
         pass
