@@ -38,9 +38,9 @@ class ConnectionManager:
         game_instance: CoupeGame = self.games[gameId]["game_instance"]
         await game_instance.perform_action(player_id, action, target, self)
 
-    def handle_reaction(self, gameId, player_id, reaction):
+    async def handle_reaction(self, gameId, player_id, reaction):
         game_instance: CoupeGame = self.games[gameId]["game_instance"]
-        game_instance.perform_reaction(player_id, reaction)
+        await game_instance.perform_reaction(player_id, reaction)
 
     async def handle_command(self, gameId, player_id, command=None):
         game_instance: CoupeGame = self.games[gameId]["game_instance"]
