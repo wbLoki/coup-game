@@ -100,47 +100,13 @@ class CoupeGame:
 
         if action == "tax":
             if "DU" in challenged_cards:
+                if challengee_cards[0] == "XX":
+                    challengee_cards[1] = "XX"
                 challengee_cards[0] = "XX"
-                self.players[challengee_player_id]["credit"] += 3
+                self.players[challenged_player_id]["credit"] += 3
                 await self.perform_command("notfication", message="Tax challenge won")
             else:
+                if challenged_cards[0] == "XX":
+                    challenged_cards[1] = "XX"
                 challenged_cards[0] = "XX"
                 await self.perform_command("notfication", message="Tax challenge lost")
-
-    async def perform_action(
-        self, player_id, action, target=None, manager: ConnectionManagerInterface = None
-    ):
-        players_list = list(self.players.keys())
-        player_index = players_list.index(player_id)
-
-        if player_index != self.turn:
-            print("Not your turn")
-            return
-
-        self.turns[self.turn] = {
-            "action": None,
-            "reaction": {"challenge": False, "allow": False, "player_id": None},
-            "status": "pending",
-        }
-
-        if action == "tax":
-            self.turns[self.turn]["action"] = "tax"
-            # send request to all players see who will [challenge, allow]
-            for player, details in self.manager.games[self.id]["players"].items():
-                if player == player_id:
-                    continue
-                await details["websocket"].send_json(
-                    {
-                        "type": "reaction",
-                        "subtype": "tax",
-                        "player_id": player_id,
-                        "next": "reaction",
-                        "turn": self.turn,
-                    }
-                )
-            # self.turn = (self.turn + 1) % len(self.players)
-
-        elif action == "challenge":
-            self.turns[self.turn]["reaction"] = "challenge"
-            # send request to the player to check if he has the card required for that action
-            ...

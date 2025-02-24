@@ -4,6 +4,7 @@ from collections import defaultdict
 
 
 from services.game import CoupeGame
+from factory.actions import ActionFactory
 
 
 class ConnectionManager:
@@ -35,7 +36,7 @@ class ConnectionManager:
 
     async def handle_action(self, gameId, player_id, action, target=None):
         game_instance: CoupeGame = self.games[gameId]["game_instance"]
-        await game_instance.perform_action(player_id, action, target, self)
+        await ActionFactory.create_action(game_instance, player_id, action, target)
 
     async def handle_reaction(self, gameId, player_id, reaction):
         game_instance: CoupeGame = self.games[gameId]["game_instance"]
@@ -49,7 +50,7 @@ class ConnectionManager:
             await manager_player["websocket"].send_json(game_player)
             return
         await game_instance.perform_command(command)
-        return 
+        return
 
     async def disconnect(self, websocket: WebSocket, gameId, player_id=None):
         self.games[gameId]["players"].pop(player_id)
@@ -58,19 +59,14 @@ class ConnectionManager:
 
         if len(self.games[gameId]["players"]) == 0:
             del self.games[gameId]
-            return 
+            return
         await game_instance.perform_command("tabla")
         await self.broadcast(f"{player_id.upper()} Left", gameId)
-        
 
     async def broadcast(self, message: str, gameId: str):
         players_list = list(self.games[gameId]["players"].keys())
         for player in players_list:
             connection: Dict[str, WebSocket] = self.games[gameId]["players"][player]
-            await connection["websocket"].send_json({
-                "type":"message",
-                "message": message
-            })
-        # for connection in self.games[gameId]:
-        # await connection.send_json(message)
-        # client.set_cache(gameId, message)
+            await connection["websocket"].send_json(
+                {"type": "message", "message": message}
+            )
