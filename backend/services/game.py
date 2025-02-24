@@ -100,10 +100,14 @@ class CoupeGame:
 
         if action == "tax":
             if "DU" in challenged_cards:
+                if challengee_cards[0] == "XX":
+                    challengee_cards[1] = "XX"
                 challengee_cards[0] = "XX"
                 self.players[challengee_player_id]["credit"] += 3
                 await self.perform_command("notfication", message="Tax challenge won")
             else:
+                if challenged_cards[0] == "XX":
+                    challenged_cards[1] = "XX"
                 challenged_cards[0] = "XX"
                 await self.perform_command("notfication", message="Tax challenge lost")
 
@@ -140,7 +144,8 @@ class CoupeGame:
                 )
             # self.turn = (self.turn + 1) % len(self.players)
 
-        elif action == "challenge":
-            self.turns[self.turn]["reaction"] = "challenge"
-            # send request to the player to check if he has the card required for that action
-            ...
+        elif action == "income":
+            self.turns[self.turn]["action"] = "income"
+            self.players[player_id]["credit"] += 1
+            self.turn = (self.turn + 1) % len(self.players)
+            await self.perform_command("tabla")
