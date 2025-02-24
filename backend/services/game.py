@@ -103,7 +103,7 @@ class CoupeGame:
                 if challengee_cards[0] == "XX":
                     challengee_cards[1] = "XX"
                 challengee_cards[0] = "XX"
-                self.players[challengee_player_id]["credit"] += 3
+                self.players[challenged_player_id]["credit"] += 3
                 await self.perform_command("notfication", message="Tax challenge won")
             else:
                 if challenged_cards[0] == "XX":
@@ -129,7 +129,6 @@ class CoupeGame:
 
         if action == "tax":
             self.turns[self.turn]["action"] = "tax"
-            # send request to all players see who will [challenge, allow]
             for player, details in self.manager.games[self.id]["players"].items():
                 if player == player_id:
                     continue
@@ -142,7 +141,6 @@ class CoupeGame:
                         "turn": self.turn,
                     }
                 )
-            # self.turn = (self.turn + 1) % len(self.players)
 
         elif action == "income":
             self.turns[self.turn]["action"] = "income"
